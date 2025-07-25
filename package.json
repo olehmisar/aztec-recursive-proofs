@@ -18,11 +18,13 @@
     "@aztec/bb.js": "1.1.2",
     "@aztec/noir-contracts.js": "1.1.2",
     "@aztec/noir-noir_js": "1.1.2",
+    "@aztec/pxe": "1.1.2",
     "@defi-wonderland/aztec-benchmark": "1.0.0",
     "@types/node": "22.5.1"
   },
   "devDependencies": {
     "@types/node": "22.5.1",
+    "fake-indexeddb": "^6.0.1",
     "lint-staged": "15.4.3",
     "prettier": "3.4.2",
     "ts-node": "10.9.2",

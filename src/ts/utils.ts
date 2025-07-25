@@ -1,19 +1,8 @@
-import { AccountWallet, Contract, createPXEClient } from "@aztec/aztec.js";
+import { AccountWallet, Contract } from "@aztec/aztec.js";
 import {
   CounterContract,
   CounterContractArtifact,
 } from "../artifacts/Counter.js";
-
-export const createPXE = async (id: number = 0) => {
-  const { BASE_PXE_URL = `http://localhost` } = process.env;
-  const url = `${BASE_PXE_URL}:${8080 + id}`;
-  const pxe = createPXEClient(url);
-  return pxe;
-};
-
-export const setupSandbox = async () => {
-  return createPXE();
-};
 
 /**
  * Deploys the Counter contract.

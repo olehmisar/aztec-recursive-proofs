@@ -1,11 +1,7 @@
+import "fake-indexeddb/auto";
+
 import { getInitialTestAccountsWallets } from "@aztec/accounts/testing";
-import {
-  AccountWallet,
-  AccountWalletWithSecretKey,
-  CompleteAddress,
-  Fr,
-  PXE,
-} from "@aztec/aztec.js";
+import { createAztecNodeClient, Fr, PXE, Wallet } from "@aztec/aztec.js";
 import {
   type Barretenberg,
   deflattenFields,
@@ -14,37 +10,43 @@ import {
   UltraHonkBackend,
 } from "@aztec/bb.js";
 import { CompiledCircuit, Noir } from "@aztec/noir-noir_js";
+import {
+  createPXEService,
+  getPXEServiceConfig,
+} from "@aztec/pxe/client/bundle";
 import os from "node:os";
 import { beforeAll, beforeEach, describe, it } from "vitest";
 import my_circuit from "../../target_circuits/my_circuit.json" with { type: "json" };
 import { CounterContract } from "../artifacts/Counter.js";
-import { deployCounter, setupSandbox } from "./utils.js";
 
 describe("Counter Contract", () => {
   let pxe: PXE;
-  let wallets: AccountWalletWithSecretKey[] = [];
-  let accounts: CompleteAddress[] = [];
-
-  let alice: AccountWallet;
-  let bob: AccountWallet;
-  let carl: AccountWallet;
+  let alice: Wallet;
 
   let counter: CounterContract;
 
   beforeAll(async () => {
-    pxe = await setupSandbox();
+    const node = createAztecNodeClient("http://localhost:8080");
+    const pxeConfig = getPXEServiceConfig();
+    pxeConfig.proverEnabled = true;
+    pxe = await createPXEService(node, pxeConfig);
 
-    wallets = await getInitialTestAccountsWallets(pxe);
-    accounts = wallets.map((w) => w.getCompleteAddress());
-
+    const wallets = await getInitialTestAccountsWallets(pxe);
     alice = wallets[0];
-    bob = wallets[1];
-    carl = wallets[2];
   });
 
   beforeEach(async () => {
-    counter = await deployCounter(alice);
+    console.log("deploying counter");
+    counter = await CounterContract.deploy(alice).send().deployed();
+    console.log("counter deployed");
   });
+
+  const noir = new Noir(my_circuit as CompiledCircuit);
+  const backend = new UltraHonkBackend(
+    my_circuit.bytecode,
+    { threads: os.cpus().length },
+    { recursive: true },
+  );
 
   it("e2e", async () => {
     const proof1 = await genProof(1, 2);
@@ -59,12 +61,6 @@ describe("Counter Contract", () => {
       .wait();
   });
 
-  const noir = new Noir(my_circuit as CompiledCircuit);
-  const backend = new UltraHonkBackend(
-    my_circuit.bytecode,
-    { threads: os.cpus().length },
-    { recursive: true },
-  );
   async function genProof(x: number, y: number) {
     const { witness } = await noir.execute({ x, y });
     const proof = await backend.generateProof(witness);
