@@ -1,14 +1,12 @@
-import {
-  CounterContract,
-  CounterContractArtifact,
-} from "../artifacts/Counter.js";
+import { getInitialTestAccountsWallets } from "@aztec/accounts/testing";
 import {
   AccountWallet,
+  AccountWalletWithSecretKey,
   CompleteAddress,
   PXE,
-  AccountWalletWithSecretKey,
 } from "@aztec/aztec.js";
-import { getInitialTestAccountsWallets } from "@aztec/accounts/testing";
+import { beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { CounterContract } from "../artifacts/Counter.js";
 import { deployCounter, setupSandbox } from "./utils.js";
 
 describe("Counter Contract", () => {
