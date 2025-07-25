@@ -257,6 +257,11 @@
   dependencies:
     tslib "^2.4.0"
 
+"@aztec/noir-acvm_js@1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@aztec/noir-acvm_js/-/noir-acvm_js-1.1.2.tgz#c2d26ba25d537cf623ea80a36f893f558a411163"
+  integrity sha512-h0IZSPIuZu85tPelklWHck91DQ4vbPtdpnXCyxM+Rm0ZOrrYzZ4ZMGksZe4ouk/grImOynOv5Os13VX0Z5/HBw==
+
 "@aztec/noir-contracts.js@1.1.2":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@aztec/noir-contracts.js/-/noir-contracts.js-1.1.2.tgz#c5b93b81dd32213125bd79ee7e8a38fde864ee22"
@@ -264,6 +269,16 @@
   dependencies:
     "@aztec/aztec.js" "1.1.2"
     tslib "^2.4.0"
+
+"@aztec/noir-noir_js@1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@aztec/noir-noir_js/-/noir-noir_js-1.1.2.tgz#32da3b02f3ff4fa656e2b02036970982db1efbe4"
+  integrity sha512-zEkFKzom4YZQAPPpaResZlO1lQD3UOFFGxNrUuQXIz+YoKFxOiBk5b6RginGG3FuR6tWll0xzQdvMA1Nc+305w==
+  dependencies:
+    "@aztec/noir-acvm_js" "1.1.2"
+    "@aztec/noir-noirc_abi" "1.1.2"
+    "@aztec/noir-types" "1.1.2"
+    pako "^2.1.0"
 
 "@aztec/noir-noirc_abi@0.86.0":
   version "0.86.0"

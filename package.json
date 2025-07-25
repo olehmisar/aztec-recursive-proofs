@@ -5,7 +5,7 @@
   "scripts": {
     "clean": "rm -rf ./src/artifacts ./target",
     "codegen": "aztec codegen target --outdir src/artifacts",
-    "compile": "aztec-nargo compile",
+    "compile": "aztec-nargo compile && mkdir -p target_circuits && mv target/*_circuit.json target_circuits/",
     "test": "yarn test:nr && yarn test:js",
     "test:js": "vitest run",
     "test:nr": "aztec test",
@@ -15,7 +15,9 @@
   "dependencies": {
     "@aztec/accounts": "1.1.2",
     "@aztec/aztec.js": "1.1.2",
+    "@aztec/bb.js": "1.1.2",
     "@aztec/noir-contracts.js": "1.1.2",
+    "@aztec/noir-noir_js": "1.1.2",
     "@defi-wonderland/aztec-benchmark": "1.0.0",
     "@types/node": "22.5.1"
   },
