@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "src/nr/counter_contract",
+]
+
+[benchmark]
+counter = "benchmarks/counter.benchmark.ts"
