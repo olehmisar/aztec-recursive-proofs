@@ -1,6 +1,6 @@
 import "fake-indexeddb/auto";
 
-import { getInitialTestAccountsWallets } from "@aztec/accounts/testing";
+import { getInitialTestAccountsManagers } from "@aztec/accounts/testing";
 import { createAztecNodeClient, Fr, PXE, Wallet } from "@aztec/aztec.js";
 import {
   type Barretenberg,
@@ -31,8 +31,8 @@ describe("Counter Contract", () => {
     pxeConfig.proverEnabled = true;
     pxe = await createPXEService(node, pxeConfig);
 
-    const wallets = await getInitialTestAccountsWallets(pxe);
-    alice = wallets[0];
+    const managers = await getInitialTestAccountsManagers(pxe);
+    alice = await managers[0].register();
   });
 
   beforeEach(async () => {
