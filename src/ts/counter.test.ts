@@ -1,15 +1,20 @@
 import "fake-indexeddb/auto";
 
 import { getInitialTestAccountsManagers } from "@aztec/accounts/testing";
-import { createAztecNodeClient, Fr, PXE, Wallet } from "@aztec/aztec.js";
+import {
+  createAztecNodeClient,
+  Fr,
+  type PXE,
+  type Wallet,
+} from "@aztec/aztec.js";
 import {
   type Barretenberg,
   deflattenFields,
-  ProofData,
+  type ProofData,
   RawBuffer,
   UltraHonkBackend,
 } from "@aztec/bb.js";
-import { CompiledCircuit, Noir } from "@aztec/noir-noir_js";
+import { type CompiledCircuit, Noir } from "@aztec/noir-noir_js";
 import {
   createPXEService,
   getPXEServiceConfig,
