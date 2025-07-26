@@ -20,6 +20,7 @@ import {
   createPXEService,
   getPXEServiceConfig,
 } from "@aztec/pxe/client/bundle";
+import { times } from "lodash-es";
 import os from "node:os";
 import { assert } from "ts-essentials";
 import { beforeAll, beforeEach, describe, it } from "vitest";
@@ -74,11 +75,13 @@ describe("Proof Verifier Contract", () => {
   it("e2e", async () => {
     const proof1 = await genProof(1, 2);
     const proof2 = await genProof(2, 3);
+    const PROOFS_LEN = 128;
     const receipt = await proofVerifier.methods
       .aggregate_proofs(
-        [proof1.vkAsFields, proof2.vkAsFields],
-        [proof1.proofAsFields, proof2.proofAsFields],
-        [proof1.vkHash, proof2.vkHash],
+        proof1.vkAsFields,
+        // [proof1.proofAsFields, proof2.proofAsFields],
+        times(PROOFS_LEN, () => proof1.proofAsFields),
+        proof1.vkHash,
       )
       .send()
       .wait();

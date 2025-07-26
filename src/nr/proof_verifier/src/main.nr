@@ -12,16 +12,16 @@ pub contract ProofVerifier {
     #[initializer]
     fn constructor() {}
 
-    global PROOFS_LEN: u32 = 2;
+    global PROOFS_LEN: u32 = 7; // this is the max number of proofs I tested that can be verified in a single `#[public] fn`. Changing to 8 causes an error "app_logic_reverted. Reason: "
 
     #[public]
     fn aggregate_proofs(
-        vks: [bb::UltraHonkVerificationKey; PROOFS_LEN],
+        vk: bb::UltraHonkVerificationKey,
         proofs: [bb::UltraHonkProof; PROOFS_LEN],
-        key_hashes: [Field; PROOFS_LEN],
+        key_hash: Field,
     ) {
         for i in 0..PROOFS_LEN {
-            bb::verify_ultrahonk_proof(vks[i], proofs[i], [], key_hashes[i])
+            bb::verify_ultrahonk_proof(vk, proofs[i], [], key_hash)
         }
     }
 }
