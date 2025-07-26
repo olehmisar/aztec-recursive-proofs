@@ -1,5 +1,5 @@
 [workspace]
-members = ["src/nr/counter_contract", "src/nr/my_circuit"]
+members = ["src/nr/proof_verifier", "src/nr/my_circuit"]
 
 [benchmark]
 counter = "benchmarks/counter.benchmark.ts"

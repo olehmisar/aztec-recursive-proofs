@@ -1,11 +1,8 @@
 use aztec::macros::aztec;
-// pub mod test;
 
 #[aztec]
-pub contract Counter {
-    // aztec library imports
-    use aztec::macros::{functions::{initializer, internal, private, public}, storage::storage};
-    use aztec::protocol_types::address::AztecAddress;
+pub contract ProofVerifier {
+    use aztec::macros::{functions::{initializer, public}, storage::storage};
     use bb_proof_verification as bb;
 
     #[storage]

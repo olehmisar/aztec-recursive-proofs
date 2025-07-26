@@ -22,14 +22,14 @@ import {
 import os from "node:os";
 import { beforeAll, beforeEach, describe, it } from "vitest";
 import my_circuit from "../../target_circuits/my_circuit.json" with { type: "json" };
-import { CounterContract } from "../artifacts/Counter.js";
+import { ProofVerifierContract } from "../artifacts/ProofVerifier.js";
 import { faucet } from "./fee_juice_faucet.js";
 
-describe("Counter Contract", () => {
+describe("Proof Verifier Contract", () => {
   let pxe: PXE;
   let alice: Wallet;
 
-  let counter: CounterContract;
+  let proofVerifier: ProofVerifierContract;
 
   beforeAll(async () => {
     const aztecSandboxUrl = "http://localhost:8080";
@@ -57,9 +57,9 @@ describe("Counter Contract", () => {
   });
 
   beforeEach(async () => {
-    console.log("deploying counter");
-    counter = await CounterContract.deploy(alice).send().deployed();
-    console.log("counter deployed");
+    console.log("deploying proof verifier");
+    proofVerifier = await ProofVerifierContract.deploy(alice).send().deployed();
+    console.log("proof verifier deployed");
   });
 
   const noir = new Noir(my_circuit as CompiledCircuit);
@@ -72,7 +72,7 @@ describe("Counter Contract", () => {
   it("e2e", async () => {
     const proof1 = await genProof(1, 2);
     const proof2 = await genProof(2, 3);
-    await counter.methods
+    const receipt = await proofVerifier.methods
       .aggregate_proofs(
         [proof1.vkAsFields, proof2.vkAsFields],
         [proof1.proofAsFields, proof2.proofAsFields],
@@ -80,6 +80,7 @@ describe("Counter Contract", () => {
       )
       .send()
       .wait();
+    console.log("receipt", receipt.status);
   });
 
   async function genProof(x: number, y: number) {
