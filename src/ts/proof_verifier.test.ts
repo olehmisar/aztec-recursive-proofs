@@ -34,16 +34,16 @@ describe("Proof Verifier Contract", () => {
   beforeAll(async () => {
     const aztecSandboxUrl = "http://localhost:8080";
     const aztecTestnetUrl = "http://34.169.171.199:8080";
+    const runOnTestnet = process.env.CHAIN === "testnet";
     const node = createAztecNodeClient(
-      process.env.CHAIN === "testnet" ? aztecTestnetUrl : aztecSandboxUrl,
+      runOnTestnet ? aztecTestnetUrl : aztecSandboxUrl,
     );
 
     const pxeConfig = getPXEServiceConfig();
-    pxeConfig.proverEnabled = true;
+    pxeConfig.proverEnabled = runOnTestnet;
     pxe = await createPXEService(node, pxeConfig);
 
-    const nodeInfo = await node.getNodeInfo();
-    if (nodeInfo.l1ChainId === 11155111) {
+    if (runOnTestnet) {
       // sepolia
       alice = await faucet({
         pxe,
