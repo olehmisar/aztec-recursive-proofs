@@ -23,6 +23,7 @@ import os from "node:os";
 import { beforeAll, beforeEach, describe, it } from "vitest";
 import my_circuit from "../../target_circuits/my_circuit.json" with { type: "json" };
 import { CounterContract } from "../artifacts/Counter.js";
+import { faucet } from "./fee_juice_faucet.js";
 
 describe("Counter Contract", () => {
   let pxe: PXE;
@@ -31,13 +32,28 @@ describe("Counter Contract", () => {
   let counter: CounterContract;
 
   beforeAll(async () => {
-    const node = createAztecNodeClient("http://localhost:8080");
+    const aztecSandboxUrl = "http://localhost:8080";
+    const aztecTestnetUrl = "http://34.169.171.199:8080";
+    const node = createAztecNodeClient(
+      process.env.CHAIN === "testnet" ? aztecTestnetUrl : aztecSandboxUrl,
+    );
+
     const pxeConfig = getPXEServiceConfig();
     pxeConfig.proverEnabled = true;
     pxe = await createPXEService(node, pxeConfig);
 
-    const managers = await getInitialTestAccountsManagers(pxe);
-    alice = await managers[0].register();
+    const nodeInfo = await node.getNodeInfo();
+    if (nodeInfo.l1ChainId === 11155111) {
+      // sepolia
+      alice = await faucet({
+        pxe,
+        l1Url: "https://sepolia.drpc.org",
+      });
+    } else {
+      // sandbox
+      const managers = await getInitialTestAccountsManagers(pxe);
+      alice = await managers[0].register();
+    }
   });
 
   beforeEach(async () => {
