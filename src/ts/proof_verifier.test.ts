@@ -5,6 +5,7 @@ import {
   createAztecNodeClient,
   Fr,
   type PXE,
+  TxStatus,
   type Wallet,
 } from "@aztec/aztec.js";
 import {
@@ -20,6 +21,7 @@ import {
   getPXEServiceConfig,
 } from "@aztec/pxe/client/bundle";
 import os from "node:os";
+import { assert } from "ts-essentials";
 import { beforeAll, beforeEach, describe, it } from "vitest";
 import my_circuit from "../../target_circuits/my_circuit.json" with { type: "json" };
 import { ProofVerifierContract } from "../artifacts/ProofVerifier.js";
@@ -80,7 +82,11 @@ describe("Proof Verifier Contract", () => {
       )
       .send()
       .wait();
-    console.log("receipt", receipt.status);
+    assert(
+      receipt.status === TxStatus.SUCCESS,
+      `proof verification failed: ${receipt.status} ${receipt.error}`,
+    );
+    console.log("receipt", receipt);
   });
 
   async function genProof(x: number, y: number) {
